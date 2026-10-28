@@ -8,6 +8,7 @@ const {
     beforeSaveProject,
     afterSaveProject
 } = require('./lib/handlers');
+const { summarizeProject } = require('./lib/ai');
 
 module.exports = cds.service.impl(async function () {
 
@@ -33,8 +34,10 @@ module.exports = cds.service.impl(async function () {
     
     this.before('DELETE', Project, deleteChildren);
     this.after('DELETE', Project, deleteUnassignedEmployees);
-    
+
     this.before('SAVE', Project, beforeSaveProject);
     this.after('SAVE', Project, afterSaveProject);
+
+    this.on('summarize', Project, summarizeProject);
 
 });
