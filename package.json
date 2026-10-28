@@ -4,6 +4,7 @@
   "description": "A simple CAP project.",
   "dependencies": {
     "@cap-js/hana": "^3",
+    "@sap-ai-sdk/foundation-models": "^2.17.0",
     "@sap-cloud-sdk/connectivity": "^3",
     "@sap-cloud-sdk/http-client": "^3",
     "@sap-cloud-sdk/resilience": "^3",

@@ -5,7 +5,10 @@ namespace sfsf.projman.service;
 
 service ProjectManager @(path : '/projman') {
     @odata.draft.enabled
-    entity Project as projection on model.Project;
+    entity Project as projection on model.Project
+        actions {
+            action summarize() returns String;
+        };
 
     entity Member as
         select from model.Member {
