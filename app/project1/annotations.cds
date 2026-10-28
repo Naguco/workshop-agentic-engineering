@@ -10,15 +10,7 @@ annotate service.Project with @(UI : {
     UpdateHidden        : false,
     DeleteHidden        : false,
     CreateHidden        : false,
-    Identification      : [
-        {Value : name},
-        {
-            $Type         : 'UI.DataFieldForAction',
-            Label         : 'Generate Summary',
-            Action        : 'sfsf.projman.service.ProjectManager.summarize',
-            ![@UI.Hidden] : ($draft.IsActiveEntity = false)
-        }
-    ],
+    Identification      : [{Value : name}],
     HeaderInfo          : {
         $Type          : 'UI.HeaderInfoType',
         TypeName       : 'Project',

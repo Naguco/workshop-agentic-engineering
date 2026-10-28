@@ -139,7 +139,20 @@
           "options": {
             "settings": {
               "editableHeaderContent": false,
-              "contextPath": "/Project"
+              "contextPath": "/Project",
+              "content": {
+                "header": {
+                  "actions": {
+                    "GenerateSummary": {
+                      "press": "project1.ext.ProjectObjectPage.generateSummary",
+                      "text": "Generate Summary",
+                      "enabled": true,
+                      "visible": true,
+                      "isAIOperation": true
+                    }
+                  }
+                }
+              }
             }
           }
         }

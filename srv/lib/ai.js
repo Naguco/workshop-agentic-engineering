@@ -73,12 +73,16 @@ Activities:
 ${activitiesLines}`;
 
         const client = await _getClient();
+        console.log('[AI] Sending prompt to AI Core...');
         const response = await client.chatCompletion({
             messages: [{ role: 'user', content: prompt }]
         });
-        return response.getContent();
+        const summary = response.getContent();
+        console.log('[AI] Response received:', summary);
+        return summary;
 
     } catch (err) {
+        console.error('[AI] Error:', err);
         req.error(500, err.message);
     }
 }
