@@ -36,6 +36,8 @@ async function summarizeProject(req) {
                 .where({ ID: projectId })
         );
 
+        if (!project) return req.reject(404, 'Project not found.');
+
         const activities = await db.run(
             SELECT.from('sfsf.projman.model.db.Activity')
                 .columns(['name', 'status.name as statusName', 'dueDate'])

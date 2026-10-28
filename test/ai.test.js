@@ -45,6 +45,15 @@ describe('summarizeProject', () => {
     expect(_buildActivitiesLines(activities)).toBe('- Task A: Overdue (due 2026-06-01)');
   });
 
+  it('calls req.error with 404 when project is not found', async () => {
+    cds.db = {
+      run: jest.fn().mockResolvedValueOnce(undefined) // project not found
+    };
+    const req = { params: [{ ID: 'nonexistent-id' }], error: jest.fn(), reject: jest.fn() };
+    await summarizeProject(req);
+    expect(req.reject).toHaveBeenCalledWith(404, 'Project not found.');
+  });
+
   it('calls req.error when AI Core throws', async () => {
     _setClientFactory(() => ({
       run: jest.fn().mockRejectedValue(new Error('AI Core unavailable'))
