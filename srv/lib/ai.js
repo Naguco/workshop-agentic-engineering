@@ -1,14 +1,22 @@
 const cds = require('@sap/cds');
 
-const AI_MODEL = 'gpt-4o';
+const AI_MODEL = 'gpt-4o-mini';
 const AI_DESTINATION = 'aicore';
 
 let _clientFactory = null;
 
 async function _getClient() {
     if (_clientFactory) return _clientFactory(AI_MODEL);
-    const { AzureOpenAiChatClient } = await import('@sap-ai-sdk/foundation-models');
-    return new AzureOpenAiChatClient(AI_MODEL, { destinationName: AI_DESTINATION });
+    const { OrchestrationClient } = await import('@sap-ai-sdk/orchestration');
+    return new OrchestrationClient(
+        {
+            promptTemplating: {
+                model: { name: AI_MODEL }
+            }
+        },
+        {},
+        { destinationName: AI_DESTINATION }
+    );
 }
 
 function _setClientFactory(factory) {
@@ -65,7 +73,9 @@ Activities:
 ${activitiesLines}`;
 
         const client = await _getClient();
-        const response = await client.run({ messages: [{ role: 'user', content: prompt }] });
+        const response = await client.chatCompletion({
+            messages: [{ role: 'user', content: prompt }]
+        });
         return response.getContent();
 
     } catch (err) {

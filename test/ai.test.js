@@ -9,8 +9,8 @@ describe('summarizeProject', () => {
   });
 
   it('builds a prompt that includes project name and returns AI response', async () => {
-    const mockRun = jest.fn().mockResolvedValue({ getContent: () => 'Test summary.' });
-    _setClientFactory(() => ({ run: mockRun }));
+    const mockChatCompletion = jest.fn().mockResolvedValue({ getContent: () => 'Test summary.' });
+    _setClientFactory(() => ({ chatCompletion: mockChatCompletion }));
 
     cds.db = {
       run: jest.fn()
@@ -56,7 +56,7 @@ describe('summarizeProject', () => {
 
   it('calls req.error when AI Core throws', async () => {
     _setClientFactory(() => ({
-      run: jest.fn().mockRejectedValue(new Error('AI Core unavailable'))
+      chatCompletion: jest.fn().mockRejectedValue(new Error('AI Core unavailable'))
     }));
 
     cds.db = {
