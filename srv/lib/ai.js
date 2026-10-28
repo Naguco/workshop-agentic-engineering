@@ -1,13 +1,14 @@
 const cds = require('@sap/cds');
 
 const AI_MODEL = 'gpt-4o';
+const AI_DESTINATION = 'aicore';
 
 let _clientFactory = null;
 
 async function _getClient() {
     if (_clientFactory) return _clientFactory(AI_MODEL);
     const { AzureOpenAiChatClient } = await import('@sap-ai-sdk/foundation-models');
-    return new AzureOpenAiChatClient(AI_MODEL);
+    return new AzureOpenAiChatClient(AI_MODEL, { destinationName: AI_DESTINATION });
 }
 
 function _setClientFactory(factory) {

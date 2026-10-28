@@ -74,6 +74,19 @@
         }
       },
       "auth": "mocked",
+      "aicore": {
+        "kind": "aicore",
+        "[hybrid]": {
+          "credentials": {
+            "destination": "aicore"
+          }
+        },
+        "[production]": {
+          "credentials": {
+            "destination": "aicore"
+          }
+        }
+      },
       "[hybrid]": {
         "destinations": {
           "binding": {
