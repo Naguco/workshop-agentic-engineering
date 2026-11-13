@@ -27,7 +27,7 @@
     "test": "cds bind --exec -- jest --silent=true",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "integration-test": "cds bind --exec --profile integration-test -- jest --config test/integration/jest.integration.config.js --runInBand"
+    "integration-test": "cds bind --exec --profile integration-test -- env NODE_OPTIONS=--experimental-vm-modules jest --config test/integration/jest.integration.config.js --runInBand"
   },
   "private": true,
   "cds": {
