@@ -26,7 +26,8 @@
     "watch-project2": "cds watch --open project2/index.html?sap-ui-xx-viewCache=false --livereload false",
     "test": "cds bind --exec -- jest --silent=true",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "integration-test": "cds bind --exec --profile integration-test -- jest --config test/integration/jest.integration.config.js --runInBand"
   },
   "private": true,
   "cds": {
@@ -112,6 +113,39 @@
       "workzone": true,
       "db": {
         "kind": "sqlite:memory"
+      },
+      "[integration-test]": {
+        "auth": "mocked",
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": ":memory:"
+          }
+        },
+        "PLTUserManagement": {
+          "kind": "odata-v2",
+          "model": "srv/external/PLTUserManagement",
+          "credentials": {
+            "destination": "PLTUserManagement"
+          }
+        },
+        "aicore": {
+          "kind": "rest",
+          "credentials": {
+            "destination": "aicore"
+          }
+        },
+        "destinations": {
+          "kind": "destinations",
+          "binding": {
+            "type": "cf",
+            "instance": "destination-service",
+            "key": "destination-service-key"
+          },
+          "vcap": {
+            "name": "destinations"
+          }
+        }
       }
     }
   },
@@ -126,6 +160,10 @@
     "testEnvironment": "node",
     "testMatch": [
       "**/test/**/*.test.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/test/integration/"
     ],
     "collectCoverageFrom": [
       "srv/**/*.js",
