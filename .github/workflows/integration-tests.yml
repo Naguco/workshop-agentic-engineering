@@ -1,0 +1,47 @@
+name: Integration Tests (third-party systems)
+
+# Manual trigger for a controlled demo: proves the pipeline makes real calls
+# to SuccessFactors and AI Core through resolved BTP destination bindings.
+on:
+  workflow_dispatch:
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install SAP CDS toolkit (cds CLI)
+        run: npm install --global @sap/cds-dk
+
+      - name: Install Cloud Foundry CLI v8
+        run: |
+          set -euo pipefail
+          curl -sL "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v8&source=github" | tar -zx
+          sudo mv cf8 /usr/local/bin/cf
+          cf version
+
+      - name: Authenticate and target Cloud Foundry
+        env:
+          CF_API: ${{ secrets.CF_API }}
+          CF_USER: ${{ secrets.CF_USER }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_ORG: ${{ secrets.CF_ORG }}
+          CF_SPACE: ${{ secrets.CF_SPACE }}
+        run: |
+          set -euo pipefail
+          cf api "$CF_API"
+          cf auth "$CF_USER" "$CF_PASSWORD"
+          cf target -o "$CF_ORG" -s "$CF_SPACE"
+
+      - name: Run integration tests against live third-party systems
+        run: npm run integration-test
