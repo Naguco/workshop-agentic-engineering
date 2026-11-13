@@ -44,4 +44,22 @@ jobs:
           cf target -o "$CF_ORG" -s "$CF_SPACE"
 
       - name: Run integration tests against live third-party systems
-        run: npm run integration-test
+        run: |
+          set -euo pipefail
+          npm run integration-test
+
+      - name: Summary
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "### ✅ Integration tests passed" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "The pipeline reached the live third-party systems through resolved BTP destination bindings:" >> "$GITHUB_STEP_SUMMARY"
+            echo "- **SuccessFactors** (\`PLTUserManagement\`) — read \`SFSF_User\`" >> "$GITHUB_STEP_SUMMARY"
+            echo "- **SAP AI Core** (\`aicore\`) — \`Project/summarize\` completion" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### ❌ Integration tests failed" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "Check the **Run integration tests** step log. A missing/failed binding shows as \`Could not find service binding of type 'destination'\` or \`Failed to load destination\`." >> "$GITHUB_STEP_SUMMARY"
+          fi
