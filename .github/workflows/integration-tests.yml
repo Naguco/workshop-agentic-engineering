@@ -32,16 +32,11 @@ jobs:
 
       - name: Authenticate and target Cloud Foundry
         env:
-          CF_API: ${{ secrets.CF_API }}
           CF_USER: ${{ secrets.CF_USER }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-          CF_ORG: ${{ secrets.CF_ORG }}
-          CF_SPACE: ${{ secrets.CF_SPACE }}
         run: |
           set -euo pipefail
-          cf api "$CF_API"
-          cf auth "$CF_USER" "$CF_PASSWORD"
-          cf target -o "$CF_ORG" -s "$CF_SPACE"
+          cf login -a https://api.cf.eu10-004.hana.ondemand.com -u "$CF_USER" -p "$CF_PASSWORD" -o workshop-vibe-coding-ai-core-org -s dev --origin iac-platform
 
       - name: Run integration tests against live third-party systems
         run: |
